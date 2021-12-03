@@ -1,0 +1,17 @@
+
+
+// New Features
+
+- Shake + color when rejected word
+- Hints
+- New games
+- Dynamic game loading
+- Circle orientation for letters
+- Better letter orientation on mobile
+- Better buttons
+- Better fonts
+- Better progress bar
+- Better word bank
+
+
+

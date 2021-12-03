@@ -1,0 +1,384 @@
+body {
+  font: 14px "Century Gothic", Futura, sans-serif;
+}
+
+ol, ul {
+  padding-left: 30px;
+}
+
+
+
+
+
+.letter-button {
+  width: 100;
+  height: 100;
+  justifyContent: 'center';
+  alignItems: 'center';
+  padding: 10;
+  borderRadius: 100;
+  backgroundColor: 'orange';
+}
+
+
+.game-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.game-current-word {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.game-letters {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.game-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.game-words {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.top-bar{
+  height: 50px;
+  width: 100%;
+  background-color: orange;
+}
+
+.board-row:after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
+.status {
+  margin-bottom: 10px;
+}
+
+.container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+
+.current-word-container {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 50px;
+  padding: 5px;
+  background-color: #aaaaaa;
+}
+
+.container .row {
+  margin: 20px;
+  text-align: center;
+}
+
+.container .row key-circle {
+  margin: 0 20px;
+}
+
+.dot {
+  height: 275px;
+  width: 275px;
+  border-radius: 50%;
+  border:  solid 2px #bbbbbb;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
+
+
+
+.circle-container {
+    position: relative;
+    width: 20em;
+    height: 20em;
+    padding: 2.8em;
+    /*2.8em = 2em*1.4 (2em = half the width of a link with img, 1.4 = sqrt(2))*/
+    border: 1px solid #999;
+    border-radius: 50%;
+    margin: 1.75em auto 0;
+    text-align: center;
+}
+.circle-container div {
+    display: block;
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 4em; height: 4em;
+    margin: -2em;
+}
+.deg0 { transform: translate(12em); } /* 12em = half the width of the wrapper */
+.deg45 { transform: rotate(45deg) translate(12em) rotate(-45deg); }
+.deg135 { transform: rotate(135deg) translate(12em) rotate(-135deg); }
+.deg180 { transform: translate(-12em); }
+.deg225 { transform: rotate(225deg) translate(12em) rotate(-225deg); }
+.deg315 { transform: rotate(315deg) translate(12em) rotate(-315deg); }
+
+.circle {
+  background: #fff;
+  border: 1px solid #999;
+  font-size: 24px;
+  font-weight: bold;
+  height: 4em;
+  text-align: center;
+  width: 4em;
+  border-radius:  100%;
+  margin-right: 0.5em;
+}
+
+.circle:hover {
+  background: #aaaaaa;
+  cursor: pointer;
+}
+
+.key-circle {
+  background: #000000;
+  color: #ffffff;
+  border: 1px solid #000000;
+}
+
+.key-circle:hover {
+  background: #aaaaaa;
+  border:  1px solid #999;
+  cursor: pointer;
+}
+
+.action-button {
+  background: #fff;
+  border: 1px solid #999;
+  font-size: 24px;
+  font-weight: bold;
+  height: 3em;
+  text-align: center;
+  width: 3em;
+  border-radius:  100%;
+  margin-right: 1.6em;
+  margin-top: 1em;
+}
+
+.clear-button:hover {
+  color: #ffffff;
+  background-color: #bb2b2b;
+  cursor: pointer;
+  border: 1px solid #bb2b2b;
+}
+
+.forward-button:hover {
+  color: #ffffff;
+  background-color: #15a72b;
+  cursor: pointer;
+  border: 1px solid #15a72b;
+}
+
+.shuffle-button:hover {
+  color: #ffffff;
+  background-color: #3779bf;
+  cursor: pointer;
+  border: 1px solid #3779bf;
+}
+
+.blank-button {
+  background: #fff;
+  font-size: 24px;
+  font-weight: bold;
+  height: 4em;
+  text-align: center;
+  width: 4em;
+  border-radius:  100%;
+  margin-right: 0.5em;
+  margin-top: 1em;
+}
+
+.action-icon {
+  height: 2em !important;
+  width: 2em !important;
+  margin-top: 10px;
+}
+
+.word-line {
+  display: flex;
+  width: 100%;
+}
+
+.action-line {
+  margin-top: 2em;
+}
+
+.word-bank {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+  flex-flow: column wrap;
+  max-width: 100%;
+  overflow: auto;
+  margin-top: 20px;
+}
+
+.word-bank-word {
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  color: #000000;
+  letter-spacing: 2px;
+  margin: 2px;
+}
+
+.word-bank-word:hover{
+  background-color: #585858;
+  color: #585858;
+  cursor: pointer;
+}
+
+.word-found {
+  display: inline-block;
+  font-size: 16px;
+  padding: 5px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #000000;
+  background-color: #ffffff;
+}
+
+
+.outer-circle {
+  background: #fff;
+  border: 1px solid #999;
+  font-size: 48px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 100px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding: 0;
+  text-align: center;
+  width: 100px;
+  border-radius:  100%;
+}
+
+
+
+
+.current-word{
+  text-align:  center;
+  width: 100% !important;
+  align-self: stretch;
+  display: flex;
+  font-weight: bold;
+  font-size: 48px;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.current-word-div {
+  display: flex;
+}
+
+.blinking-cursor{
+  font-weight: 100;
+  font-size: 48px;
+  color: #2E3D48;
+  padding-right: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  -webkit-animation: 1s blink step-end infinite;
+  -moz-animation: 1s blink step-end infinite;
+  -ms-animation: 1s blink step-end infinite;
+  -o-animation: 1s blink step-end infinite;
+  animation: 1s blink step-end infinite;
+}
+
+@keyframes "blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
+
+@-moz-keyframes blink {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
+
+@-webkit-keyframes "blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
+
+@-ms-keyframes "blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
+
+@-o-keyframes "blink" {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: black;
+  }
+}
+
+.square:focus {
+  outline: none;
+}
+
+.kbd-navigation .square:focus {
+  background: #ddd;
+}
+
+.game {
+  display: flex;
+  flex-direction: row;
+}
+
+.game-info {
+  margin-left: 20px;
+}
+
+

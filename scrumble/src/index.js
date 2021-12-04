@@ -6,6 +6,7 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 import ShuffleIcon from '@material-ui/icons/Shuffle';
 import ProgressBar from "./progress-bar.component";
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
+import logo from './BW_Logo.png';
 
 // Main class for the game, loads the words and letters
 class GameBoard extends React.Component {
@@ -200,7 +201,9 @@ class GameBoard extends React.Component {
   render(){
     return(
       <div>
-        <div className='top-bar'></div>
+        <div className='top-bar'>
+          <img className='logo' src={logo} alt='scrumble logo' />
+        </div>
         <div className="game-container">
           {/* Add the current word that the user is typing */}
           <div className="game-current-word">

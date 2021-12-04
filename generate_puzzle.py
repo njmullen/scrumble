@@ -4,7 +4,7 @@ import nltk
 import random
 import os
 import threading
-
+import requests
 
 all_words = []
 
@@ -36,7 +36,7 @@ vowels = ['a', 'e', 'i', 'o', 'u']
 common_letters = ['r', 'n', 't', 'l', 'c', 'd', 'g', 'p', 'm']
 remaining_letters = ['h', 'b', 'y', 'f', 'v', 'k', 'w', 'z', 'x', 'j', 'q']
 
-# Make 100 puzzles
+# Make 5 puzzles
 count = 0
 while count < 5:
     # Add a key letter from common letters
@@ -85,17 +85,27 @@ while count < 5:
         if len(word) < 4:
             fail = True
         else:
-            for letter in word:
-                if letter not in letters:
-                    fail = True
-                    break
+            if key_letter not in word:
+                fail = True
+            else:
+                for letter in word:
+                    if letter not in letters:
+                        fail = True
+                        break
 
         # If this word passed, double-check and add to list
         if not fail:
             syns = wordnet.synsets(word)
+
             if len(syns) > 0:
-                words.append({"word": word, "definition": syns[0].definition(), "score": len(word)})
-                total_score += len(word)
+                # Check dictionary API
+                url = 'https://api.dictionaryapi.dev/api/v2/entries/en/' + word
+                response = requests.get(url)
+                if response.status_code == 200:
+                    words.append({"word": word, "definition": syns[0].definition(), "score": len(word)})
+                    total_score += len(word)
+                else:
+                    print("! Word rejected: " + word)
             else:
                 print("! Word not found: " + word)
 

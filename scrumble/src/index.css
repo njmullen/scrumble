@@ -223,6 +223,12 @@ ol, ul {
   margin-top: 10px;
 }
 
+.logo {
+  height: 50px;
+  display: block;
+  margin: auto;
+}
+
 .word-line {
   display: flex;
   width: 100%;

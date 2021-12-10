@@ -5,6 +5,7 @@ import random
 import os
 import threading
 import requests
+from datetime import datetime
 
 all_words = []
 
@@ -35,10 +36,11 @@ def generate_matches(letters, num_letters):
 vowels = ['a', 'e', 'i', 'o', 'u']
 common_letters = ['r', 'n', 't', 'l', 'c', 'd', 'g', 'p', 'm']
 remaining_letters = ['h', 'b', 'y', 'f', 'v', 'k', 'w', 'z', 'x', 'j', 'q']
+games = []
 
-# Make 5 puzzles
+# Make 20 puzzles
 count = 0
-while count < 5:
+while count < 20:
     # Add a key letter from common letters
     key_letter = random.choice(common_letters)
     letters = []
@@ -72,8 +74,6 @@ while count < 5:
     from nltk.corpus import wordnet
     setofwords = set(words.words())
 
-    x = 4
-    threads = []
     words = []
     total_score = 0
 
@@ -130,15 +130,24 @@ while count < 5:
     puzzle_title += '.json'
 
     # Determine the save path based on the score
-    if total_score < 100:
-        save_path = 'puzzles_under_100'
-    elif total_score >= 100 and total_score < 200:
-        save_path = 'puzzles_under_200'
-    else:
-        save_path = 'puzzles_over_200'
-    total_path = os.path.join(save_path, puzzle_title)
-    with open(total_path, 'w') as fp:
-        json.dump(output, fp)
+    # if total_score < 100:
+    #     save_path = 'puzzles_under_100'
+    # elif total_score >= 100 and total_score < 200:
+    #     save_path = 'puzzles_under_200'
+    # else:
+    #     save_path = 'puzzles_over_200'
+    # total_path = os.path.join(save_path, puzzle_title)
+    # with open(total_path, 'w') as fp:
+    #     json.dump(output, fp)
 
-    # Increment count
-    count += 1
+    # Check the score, if it's over 100, include it
+    if total_score > 100:
+        print("Adding puzzle. Score: " + str(total_score))
+        games.append(output)
+        count += 1
+
+# Write out the games
+path = 'games.json'
+with open(path, 'w') as fp:
+    json.dump(games, fp)
+

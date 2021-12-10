@@ -4,9 +4,11 @@ import './index.css';
 import ClearIcon from '@material-ui/icons/Clear'
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward'
 import ShuffleIcon from '@material-ui/icons/Shuffle';
+import CachedIcon from '@material-ui/icons/Cached';
 import ProgressBar from "./progress-bar.component";
 import { Text, TouchableOpacity, StyleSheet } from 'react-native';
 import logo from './BW_Logo.png';
+import games from './games.json';
 
 // Main class for the game, loads the words and letters
 class GameBoard extends React.Component {
@@ -30,9 +32,12 @@ class GameBoard extends React.Component {
     this.handleShuffle = this.handleShuffle.bind(this);
     this.handleClear = this.handleClear.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleNewGame = this.handleNewGame.bind(this);
+    this.loadGame = this.loadGame.bind(this);
+    this.startGame = this.startGame.bind(this);
 
-    // Load the game
-    this.loadFile();
+    // Start the game
+    this.startGame();
   }
 
   // Add key listeners for the key and non-key letters, as well as Enter and Backspace
@@ -61,18 +66,16 @@ class GameBoard extends React.Component {
 
   // Shuffle the non-key letters around
   shuffle(array) {
-    var currentIndex = array.length,  randomIndex;
+    var currentIndex = array.length, randomIndex;
 
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-
       // Pick a remaining element...
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex--;
 
       // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
+      [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
     }
 
     return array;
@@ -103,24 +106,46 @@ class GameBoard extends React.Component {
       this.createdWord = '';
       this.clickedLetters = [];
       this.forceUpdate();
+    } else {
+      // Update the words found in localStorage
+      localStorage.setItem('savedWords', this.foundWords);
+      localStorage.setItem('savedScore', this.score);
     }
   }
 
-  // Load the game
-  loadFile(){
-    // Get JSON string
-    let gameString = {"total_score": 172, "key_letter": "l", "letters": ["l", "a", "e", "r", "p", "n", "y"], "words": [{"word": "lane", "definition": "a narrow way or road", "score": 4}, {"word": "lear", "definition": "British artist and writer of nonsense verse (1812-1888)", "score": 4}, {"word": "leap", "definition": "a light, self-propelled movement upwards or forwards", "score": 4}, {"word": "lean", "definition": "the property possessed by a line or surface that departs from the vertical", "score": 4}, {"word": "lyra", "definition": "a small constellation in the northern hemisphere near Cygnus and Draco; contains the star Vega", "score": 4}, {"word": "lyre", "definition": "a harp used by ancient Greeks for accompaniment", "score": 4}, {"word": "earl", "definition": "a British peer ranking below a marquess and above a viscount", "score": 4}, {"word": "rely", "definition": "have confidence or faith in", "score": 4}, {"word": "real", "definition": "any rational or irrational number", "score": 4}, {"word": "plan", "definition": "a series of steps to be carried out or goals to be accomplished", "score": 4}, {"word": "play", "definition": "a dramatic work intended for performance by actors on a stage", "score": 4}, {"word": "plea", "definition": "a humble request for help from someone in authority", "score": 4}, {"word": "pale", "definition": "a wooden strip forming part of a fence", "score": 4}, {"word": "peal", "definition": "a deep prolonged sound (as of thunder or large bells)", "score": 4}, {"word": "yale", "definition": "a university in Connecticut", "score": 4}, {"word": "yelp", "definition": "a sharp high-pitched cry (especially by a dog)", "score": 4}, {"word": "laney", "definition": "United States educator who founded the first private school for Black students in Augusta, Georgia (1854-1933)", "score": 5}, {"word": "layer", "definition": "single thickness of usually some homogeneous substance", "score": 5}, {"word": "learn", "definition": "gain knowledge or skills", "score": 5}, {"word": "early", "definition": "at or near the beginning of a period of time or course of events or before the usual or expected time", "score": 5}, {"word": "relay", "definition": "the act of passing something along from one person or group to another", "score": 5}, {"word": "reply", "definition": "a statement (either spoken or written) that is made to reply to a question or request or criticism or accusation", "score": 5}, {"word": "renal", "definition": "of or relating to the kidneys", "score": 5}, {"word": "plane", "definition": "an aircraft that has a fixed wing and is powered by propellers or jets", "score": 5}, {"word": "plyer", "definition": "someone who plies a trade", "score": 5}, {"word": "paler", "definition": "very light colored; highly diluted with white", "score": 5}, {"word": "panel", "definition": "sheet that forms a distinct (usually flat and rectangular) section or component of something", "score": 5}, {"word": "pearl", "definition": "a smooth lustrous round structure inside the shell of a clam or oyster; much valued as a jewel", "score": 5}, {"word": "penal", "definition": "of or relating to punishment", "score": 5}, {"word": "replay", "definition": "something (especially a game) that is played again", "score": 6}, {"word": "planer", "definition": "a power tool for smoothing or shaping wood", "score": 6}, {"word": "player", "definition": "a person who participates in or is skilled at some game", "score": 6}, {"word": "parley", "definition": "a negotiation between enemies", "score": 6}, {"word": "pearly", "definition": "informal terms for a human `tooth'", "score": 6}, {"word": "nearly", "definition": "(of actions or states) slightly short of or not quite accomplished; all but", "score": 6}, {"word": "plenary", "definition": "full in all respects", "score": 7}]}
-    // Get key and non-key letters for rendering
-    let nonKeyLetters = gameString['letters']
-    nonKeyLetters.splice(0, 1);
-    this.nonKeyLetters = nonKeyLetters;
-    this.keyLetter = gameString['key_letter'];
-    this.validWords = gameString['words'];
+  // Start the game
+  startGame(){
+    // Load data from localStorage
+    let currentGame = localStorage.getItem('currentGame');
+    if(currentGame === null){
+      // Get the first game and create localStorage
+      localStorage.setItem('currentGame', 0);
+      currentGame = 0;
+    } 
+    this.loadGame(currentGame);
+  }
 
-    // Calculate total score
-    for(var i = 0; i < this.validWords.length; i++){
-      this.totalScore += this.validWords[i].score;
+  // Load the game
+  loadGame(gameIndex){
+    // Load the game
+    this.nonKeyLetters = [];
+    for(var i = 1; i < games[gameIndex]['letters'].length; i++){
+      this.nonKeyLetters.push(games[gameIndex]['letters'][i]);
+    } 
+    this.keyLetter = games[gameIndex]['key_letter'];
+    this.validWords = games[gameIndex]['words'];
+    this.totalScore = games[gameIndex]['total_score'];
+
+    // Load any found words and score
+    let currentWords = localStorage.getItem('savedWords');
+    let currentScore = localStorage.getItem('savedScore');
+
+    if(currentWords !== null){
+      currentWords = currentWords.split(',');
+      this.foundWords = currentWords;
+      this.score = currentScore;
     }
+    this.forceUpdate();
   }
 
   handleLetterClick = (val, letter) => {
@@ -146,17 +171,26 @@ class GameBoard extends React.Component {
     this.submitWord();
   }
 
-  handleActionClick = (val) => {
-    // Receive an action
-    if(val === 'shuffle'){
-      this.shuffle(this.nonKeyLetters);
-    } else if(val === 'clear'){
-      this.clickedLetters = [];
-      this.createdWord = '';
-    } else if(val === 'arrow-forward') {
-      //
+  handleNewGame(){
+    // Confirm that user wants a new game
+    let newGame = window.confirm("Are you sure you want to play a new game?");
+    if(newGame){
+      // Clear current game from localStorage
+      localStorage.removeItem('savedWords');
+      localStorage.removeItem('savedScore');
+
+      // Increment the new game in localStorage
+      let currentGame = parseInt(localStorage.getItem('currentGame'));
+      if(currentGame === (games.length - 1)){
+        currentGame = 0;
+      } else {
+        currentGame += 1;
+      }
+      localStorage.setItem('currentGame', currentGame);
+
+      // Reload the game
+      this.loadGame(currentGame);
     }
-    this.forceUpdate();
   }
 
   styles = StyleSheet.create({
@@ -226,6 +260,9 @@ class GameBoard extends React.Component {
 
           <div className="game-buttons">
             {/* Add the action buttons */}
+            <TouchableOpacity style={this.styles.actionButton} onPress={this.handleNewGame}>
+              <Text style={this.styles.letterText}><CachedIcon className="action-icon" /></Text>
+            </TouchableOpacity>
             <TouchableOpacity style={this.styles.actionButton} onPress={this.handleClear}>
               <Text style={this.styles.letterText}><ClearIcon className="action-icon" /></Text>
             </TouchableOpacity>
@@ -282,8 +319,6 @@ class WordBank extends React.Component {
     )
   }
 }
-
-
 
 // ========================================
 
